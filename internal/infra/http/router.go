@@ -36,5 +36,17 @@ func AddEventRoutes(router *chi.Router, eventController *controllers.EventContro
 			"/{latitude}/{longitude}/{radius}",
 			eventController.FindByCoords(),
 		)
+		apiRouter.Post(
+			"/create",
+			eventController.PostOne(),
+		)
+		apiRouter.Put(
+			"/update/{id}",
+			eventController.UpdateOne(),
+		)
+		apiRouter.Delete(
+			"/delete/{id}",
+			eventController.DeleteOne(),
+		)
 	})
 }

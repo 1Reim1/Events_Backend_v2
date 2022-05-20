@@ -4,6 +4,7 @@ import (
 	"Events_Backend_v2/internal/domain/event"
 	"fmt"
 	"github.com/go-chi/chi"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 )
@@ -107,6 +108,101 @@ func (c *EventController) FindByCoords() http.HandlerFunc {
 		err = success(w, events)
 		if err != nil {
 			fmt.Printf("EventController.FindAll(): %s", err)
+		}
+	}
+}
+
+func (c *EventController) PostOne() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			fmt.Printf("EventController.PostOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.PostOne(): %s", err)
+			}
+			return
+		}
+		err = (*c.service).PostOne(body)
+		if err != nil {
+			fmt.Printf("EventController.PostOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.PostOne(): %s", err)
+			}
+			return
+		}
+
+		err = success(w, "posted")
+		if err != nil {
+			fmt.Printf("EventController.PostOne(): %s", err)
+		}
+	}
+}
+
+func (c *EventController) UpdateOne() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+		if err != nil {
+			fmt.Printf("EventController.UpdateOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.UpdateOne(): %s", err)
+			}
+			return
+		}
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			fmt.Printf("EventController.UpdateOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.UpdateOne(): %s", err)
+			}
+			return
+		}
+
+		err = (*c.service).UpdateOne(int(id), body)
+		if err != nil {
+			fmt.Printf("EventController.UpdateOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.UpdateOne(): %s", err)
+			}
+			return
+		}
+
+		err = success(w, "updated")
+		if err != nil {
+			fmt.Printf("EventController.UpdateOne(): %s", err)
+		}
+	}
+}
+
+func (c *EventController) DeleteOne() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+		if err != nil {
+			fmt.Printf("EventController.DeleteOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.DeleteOne(): %s", err)
+			}
+			return
+		}
+
+		err = (*c.service).DeleteOne(int(id))
+		if err != nil {
+			fmt.Printf("EventController.DeleteOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.DeleteOne(): %s", err)
+			}
+			return
+		}
+
+		err = success(w, "deleted")
+		if err != nil {
+			fmt.Printf("EventController.DeleteOne(): %s", err)
 		}
 	}
 }

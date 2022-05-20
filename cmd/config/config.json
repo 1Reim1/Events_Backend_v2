@@ -1,7 +1,7 @@
 {
   "BindAddr": ":8080",
-  "DatabaseHost": "127.0.0.1:3306",
-  "DatabaseUser": "root",
+  "DatabaseHost": "127.0.0.1:5432",
+  "DatabaseUser": "postgres",
   "DatabasePassword": "",
   "DatabaseName": "events_backend"
 }

@@ -13,11 +13,13 @@ func main() {
 	conf, err := config.NewConfig()
 	if err != nil {
 		fmt.Printf("config.NewConfig() error: %s", err)
+		return
 	}
 	// Event
-	eventRepository, err := event.NewMySQLRepository(conf)
+	eventRepository, err := event.NewPostgresqlRepository(conf)
 	if err != nil {
-		fmt.Printf("event.NewMySQLRepository() error: %s", err)
+		fmt.Printf("event.NewMysqlRepository() error: %s", err)
+		return
 	}
 	eventService := event.NewSimpleService(eventRepository)
 	eventController := controllers.NewEventController(&eventService)

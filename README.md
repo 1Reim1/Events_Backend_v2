@@ -1,13 +1,21 @@
 # Events_Backend_v2
 
-## Events List
+## GET
 
-`/events`
+`/events` - list of all events
 
-## Event (by ID)
+`/events/{id}` - event by id
 
-`/events/{id}`
+`/events/{latitude}/{longitude}/{radius}` - events by radius
 
-## Events (by coords)
+## POST
 
-`/events/{latitude}/{longitude}/{radius}`
+`/events/create`
+
+## PUT
+
+`/events/update/{id}`
+
+## DELETE
+
+`/events/delete/{id}`

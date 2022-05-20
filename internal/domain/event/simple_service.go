@@ -1,6 +1,9 @@
 package event
 
-import "math"
+import (
+	"encoding/json"
+	"math"
+)
 
 type SimpleService struct {
 	repo Repository
@@ -22,4 +25,26 @@ func (s SimpleService) FindOne(id int) (*Event, error) {
 
 func (s SimpleService) FindByCoords(latitude, longitude, radius float64) (*[]Event, error) {
 	return s.repo.FindByCoords(latitude, longitude, math.Abs(radius))
+}
+
+func (s SimpleService) PostOne(content []byte) error {
+	event := Event{}
+	err := json.Unmarshal(content, &event)
+	if err != nil {
+		return err
+	}
+	return s.repo.PostOne(&event)
+}
+
+func (s SimpleService) UpdateOne(id int, content []byte) error {
+	event := Event{}
+	err := json.Unmarshal(content, &event)
+	if err != nil {
+		return err
+	}
+	return s.repo.UpdateOne(id, &event)
+}
+
+func (s SimpleService) DeleteOne(id int) error {
+	return s.repo.DeleteOne(id)
 }
