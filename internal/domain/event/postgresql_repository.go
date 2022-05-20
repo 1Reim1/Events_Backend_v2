@@ -26,9 +26,8 @@ func NewPostgresqlRepository(conf *config.Config) (*PostgresqlRepository, error)
 }
 
 func (repo *PostgresqlRepository) FindAll() (*[]Event, error) {
-	eventsTable := repo.sess.Collection("events")
 	events := make([]Event, 0)
-	err := eventsTable.Find().All(&events)
+	err := repo.sess.Collection("events").Find().All(&events)
 	if err != nil {
 		return nil, err
 	}
@@ -36,9 +35,8 @@ func (repo *PostgresqlRepository) FindAll() (*[]Event, error) {
 }
 
 func (repo *PostgresqlRepository) FindOne(id int) (*Event, error) {
-	eventsTable := repo.sess.Collection("events")
 	event := Event{}
-	err := eventsTable.Find(id).One(&event)
+	err := repo.sess.Collection("events").Find(id).One(&event)
 	if err != nil {
 		return nil, err
 	}
