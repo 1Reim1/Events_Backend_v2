@@ -13,11 +13,8 @@ func Router(eventController *controllers.EventController) http.Handler {
 	router.Group(func(apiRouter chi.Router) {
 		apiRouter.Use(middleware.RedirectSlashes)
 
-		apiRouter.Route("/", func(apiRouter chi.Router) {
-			AddEventRoutes(&apiRouter, eventController)
-
-			apiRouter.Handle("/*", NotFoundJSON())
-		})
+		AddEventRoutes(&apiRouter, eventController)
+		apiRouter.Handle("/*", NotFoundJSON())
 	})
 	return router
 }
