@@ -56,7 +56,8 @@ func (repo *PostgresqlRepository) FindByCoords(latitude, longitude, radius float
 }
 
 func (repo *PostgresqlRepository) PostOne(event *Event) error {
-	_, err := repo.sess.Collection("events").Insert(event.WithoudID())
+	event.ID = 0
+	_, err := repo.sess.Collection("events").Insert(event)
 	return err
 }
 
@@ -66,7 +67,8 @@ func (repo *PostgresqlRepository) UpdateOne(id int, event *Event) error {
 	if err != nil {
 		return err
 	}
-	return res.Update(event.WithoudID())
+	event.ID = 0
+	return res.Update(event)
 }
 
 func (repo *PostgresqlRepository) DeleteOne(id int) error {
