@@ -40,7 +40,7 @@ func (c *EventController) FindAll() http.HandlerFunc {
 
 func (c *EventController) FindOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+		id, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
 		if err != nil {
 			fmt.Printf("EventController.FindOne(): %s\n", err)
 			err = internalServerError(w, err)
@@ -49,7 +49,7 @@ func (c *EventController) FindOne() http.HandlerFunc {
 			}
 			return
 		}
-		event, err := (*c.service).FindOne(int(id))
+		event, err := (*c.service).FindOne(id)
 		if err != nil {
 			fmt.Printf("EventController.FindOne(): %s\n", err)
 			err = internalServerError(w, err)
@@ -142,7 +142,7 @@ func (c *EventController) PostOne() http.HandlerFunc {
 
 func (c *EventController) UpdateOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+		id, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
 		if err != nil {
 			fmt.Printf("EventController.UpdateOne(): %s\n", err)
 			err = internalServerError(w, err)
@@ -161,7 +161,7 @@ func (c *EventController) UpdateOne() http.HandlerFunc {
 			return
 		}
 
-		err = (*c.service).UpdateOne(int(id), body)
+		err = (*c.service).UpdateOne(id, body)
 		if err != nil {
 			fmt.Printf("EventController.UpdateOne(): %s\n", err)
 			err = internalServerError(w, err)
@@ -180,7 +180,7 @@ func (c *EventController) UpdateOne() http.HandlerFunc {
 
 func (c *EventController) DeleteOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+		id, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
 		if err != nil {
 			fmt.Printf("EventController.DeleteOne(): %s\n", err)
 			err = internalServerError(w, err)
@@ -190,7 +190,7 @@ func (c *EventController) DeleteOne() http.HandlerFunc {
 			return
 		}
 
-		err = (*c.service).DeleteOne(int(id))
+		err = (*c.service).DeleteOne(id)
 		if err != nil {
 			fmt.Printf("EventController.DeleteOne(): %s\n", err)
 			err = internalServerError(w, err)

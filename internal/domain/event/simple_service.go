@@ -19,7 +19,7 @@ func (s SimpleService) FindAll() (*[]Event, error) {
 	return s.repo.FindAll()
 }
 
-func (s SimpleService) FindOne(id int) (*Event, error) {
+func (s SimpleService) FindOne(id uint64) (*Event, error) {
 	return s.repo.FindOne(id)
 }
 
@@ -36,7 +36,7 @@ func (s SimpleService) PostOne(content []byte) error {
 	return s.repo.PostOne(&event)
 }
 
-func (s SimpleService) UpdateOne(id int, content []byte) error {
+func (s SimpleService) UpdateOne(id uint64, content []byte) error {
 	event := Event{}
 	err := json.Unmarshal(content, &event)
 	if err != nil {
@@ -45,6 +45,6 @@ func (s SimpleService) UpdateOne(id int, content []byte) error {
 	return s.repo.UpdateOne(id, &event)
 }
 
-func (s SimpleService) DeleteOne(id int) error {
+func (s SimpleService) DeleteOne(id uint64) error {
 	return s.repo.DeleteOne(id)
 }

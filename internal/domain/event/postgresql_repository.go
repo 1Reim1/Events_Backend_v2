@@ -34,7 +34,7 @@ func (repo *PostgresqlRepository) FindAll() (*[]Event, error) {
 	return &events, nil
 }
 
-func (repo *PostgresqlRepository) FindOne(id int) (*Event, error) {
+func (repo *PostgresqlRepository) FindOne(id uint64) (*Event, error) {
 	event := Event{}
 	err := repo.sess.Collection("events").Find(id).One(&event)
 	if err != nil {
@@ -61,7 +61,7 @@ func (repo *PostgresqlRepository) PostOne(event *Event) error {
 	return err
 }
 
-func (repo *PostgresqlRepository) UpdateOne(id int, event *Event) error {
+func (repo *PostgresqlRepository) UpdateOne(id uint64, event *Event) error {
 	res := repo.sess.Collection("events").Find(id)
 	err := res.One(&Event{})
 	if err != nil {
@@ -71,7 +71,7 @@ func (repo *PostgresqlRepository) UpdateOne(id int, event *Event) error {
 	return res.Update(event)
 }
 
-func (repo *PostgresqlRepository) DeleteOne(id int) error {
+func (repo *PostgresqlRepository) DeleteOne(id uint64) error {
 	res := repo.sess.Collection("events").Find(id)
 	err := res.One(&Event{})
 	if err != nil {

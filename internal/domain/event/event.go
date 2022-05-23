@@ -1,7 +1,7 @@
 package event
 
 type Event struct {
-	ID               int      `json:"id" db:"id,omitempty"`
+	ID               uint64   `json:"id" db:"id,omitempty"`
 	Title            string   `json:"title" db:"title"`
 	ShortDescription string   `json:"short_description" db:"short_description"`
 	Description      string   `json:"description" db:"description"`
