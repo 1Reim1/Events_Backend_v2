@@ -10,7 +10,7 @@ type PostgresqlRepository struct {
 	sess db.Session
 }
 
-func NewPostgresqlRepository(conf *config.Config) (*PostgresqlRepository, error) {
+func NewPostgresqlRepository(conf *config.Config) (Repository, error) {
 	sess, err := postgresql.Open(postgresql.ConnectionURL{
 		Database: conf.DatabaseName,
 		Host:     conf.DatabaseHost,

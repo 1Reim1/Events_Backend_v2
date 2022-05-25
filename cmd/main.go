@@ -21,7 +21,7 @@ func main() {
 		fmt.Printf("event.NewMysqlRepository() error: %s", err)
 		return
 	}
-	eventService := event.NewSimpleService(eventRepository)
+	eventService := event.NewSimpleService(&eventRepository)
 	eventController := controllers.NewEventController(&eventService)
 	// Server
 	err = http.Server(
