@@ -4,9 +4,9 @@
 
 `/events` - list of all events
 
-`/events/{id}` - event by id
+`/events/?latitude={float}&longitude={float}&radius={float}` - events by radius
 
-`events/byCoords?latitude={float}&longitude={float}&radius={float}` - events by radius
+`/events/{id}` - event by id
 
 ## POST
 
