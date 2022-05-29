@@ -2,7 +2,7 @@ package http
 
 import (
 	"Events_Backend_v2/internal/infra/http/controllers"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"net/http"
 )
@@ -30,19 +30,19 @@ func AddEventRoutes(router *chi.Router, eventController *controllers.EventContro
 			eventController.FindOne(),
 		)
 		apiRouter.Get(
-			"/{latitude}/{longitude}/{radius}",
+			"/byCoords",
 			eventController.FindByCoords(),
 		)
 		apiRouter.Post(
-			"/create",
-			eventController.PostOne(),
+			"/",
+			eventController.CreateOne(),
 		)
 		apiRouter.Put(
-			"/update/{id}",
+			"/",
 			eventController.UpdateOne(),
 		)
 		apiRouter.Delete(
-			"/delete/{id}",
+			"/{id}",
 			eventController.DeleteOne(),
 		)
 	})

@@ -16,12 +16,12 @@ func main() {
 		return
 	}
 	// Event
-	eventRepository, err := event.NewPostgresqlRepository(conf)
+	eventRepository, err := event.NewRepository(conf)
 	if err != nil {
 		fmt.Printf("event.NewMysqlRepository() error: %s", err)
 		return
 	}
-	eventService := event.NewSimpleService(&eventRepository)
+	eventService := event.NewService(&eventRepository)
 	eventController := controllers.NewEventController(&eventService)
 	// Server
 	err = http.Server(

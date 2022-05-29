@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"Events_Backend_v2/internal/domain/event"
+	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi"
-	"io/ioutil"
+	"github.com/go-chi/chi/v5"
 	"net/http"
 	"strconv"
 )
@@ -68,7 +68,7 @@ func (c *EventController) FindOne() http.HandlerFunc {
 
 func (c *EventController) FindByCoords() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		latitude, err := strconv.ParseFloat(chi.URLParam(r, "latitude"), 64)
+		latitude, err := strconv.ParseFloat(r.URL.Query().Get("latitude"), 64)
 		if err != nil {
 			fmt.Printf("EventController.FindByCoords(): %s\n", err)
 			err = internalServerError(w, err)
@@ -77,7 +77,7 @@ func (c *EventController) FindByCoords() http.HandlerFunc {
 			}
 			return
 		}
-		longitude, err := strconv.ParseFloat(chi.URLParam(r, "longitude"), 64)
+		longitude, err := strconv.ParseFloat(r.URL.Query().Get("longitude"), 64)
 		if err != nil {
 			fmt.Printf("EventController.FindByCoords(): %s\n", err)
 			err = internalServerError(w, err)
@@ -86,7 +86,7 @@ func (c *EventController) FindByCoords() http.HandlerFunc {
 			}
 			return
 		}
-		radius, err := strconv.ParseFloat(chi.URLParam(r, "radius"), 64)
+		radius, err := strconv.ParseFloat(r.URL.Query().Get("radius"), 64)
 		if err != nil {
 			fmt.Printf("EventController.FindByCoords(): %s\n", err)
 			err = internalServerError(w, err)
@@ -112,46 +112,39 @@ func (c *EventController) FindByCoords() http.HandlerFunc {
 	}
 }
 
-func (c *EventController) PostOne() http.HandlerFunc {
+func (c *EventController) CreateOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, err := ioutil.ReadAll(r.Body)
+		var event event.Event
+		err := json.NewDecoder(r.Body).Decode(&event)
 		if err != nil {
-			fmt.Printf("EventController.PostOne(): %s\n", err)
+			fmt.Printf("EventController.CreateOne(): %s\n", err)
 			err = internalServerError(w, err)
 			if err != nil {
-				fmt.Printf("EventController.PostOne(): %s\n", err)
+				fmt.Printf("EventController.CreateOne(): %s\n", err)
 			}
 			return
 		}
-		err = (*c.service).PostOne(body)
+		err = (*c.service).CreateOne(&event)
 		if err != nil {
-			fmt.Printf("EventController.PostOne(): %s\n", err)
+			fmt.Printf("EventController.CreateOne(): %s\n", err)
 			err = internalServerError(w, err)
 			if err != nil {
-				fmt.Printf("EventController.PostOne(): %s\n", err)
+				fmt.Printf("EventController.CreateOne(): %s\n", err)
 			}
 			return
 		}
 
-		err = success(w, "posted")
+		err = success(w, event)
 		if err != nil {
-			fmt.Printf("EventController.PostOne(): %s\n", err)
+			fmt.Printf("EventController.CreateOne(): %s\n", err)
 		}
 	}
 }
 
 func (c *EventController) UpdateOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
-		if err != nil {
-			fmt.Printf("EventController.UpdateOne(): %s\n", err)
-			err = internalServerError(w, err)
-			if err != nil {
-				fmt.Printf("EventController.UpdateOne(): %s\n", err)
-			}
-			return
-		}
-		body, err := ioutil.ReadAll(r.Body)
+		var event event.Event
+		err := json.NewDecoder(r.Body).Decode(&event)
 		if err != nil {
 			fmt.Printf("EventController.UpdateOne(): %s\n", err)
 			err = internalServerError(w, err)
@@ -161,7 +154,7 @@ func (c *EventController) UpdateOne() http.HandlerFunc {
 			return
 		}
 
-		err = (*c.service).UpdateOne(id, body)
+		err = (*c.service).UpdateOne(&event)
 		if err != nil {
 			fmt.Printf("EventController.UpdateOne(): %s\n", err)
 			err = internalServerError(w, err)

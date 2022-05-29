@@ -6,16 +6,16 @@
 
 `/events/{id}` - event by id
 
-`/events/{latitude}/{longitude}/{radius}` - events by radius
+`events/byCoords?latitude={float}&longitude={float}&radius={float}` - events by radius
 
 ## POST
 
-`/events/create`
+`/events`
 
 ## PUT
 
-`/events/update/{id}`
+`/events`
 
 ## DELETE
 
-`/events/delete/{id}`
+`/events/{id}`
