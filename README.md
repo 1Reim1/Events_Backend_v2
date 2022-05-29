@@ -4,7 +4,7 @@
 
 `/events` - list of all events
 
-`/events/?latitude={float}&longitude={float}&radius={float}` - events by radius
+`/events?latitude={float}&longitude={float}&radius={float}` - events by radius
 
 `/events/{id}` - event by id
 
