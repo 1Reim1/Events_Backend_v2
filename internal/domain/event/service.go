@@ -3,9 +3,8 @@ package event
 import "math"
 
 type Service interface {
-	FindAll() (*[]Event, error)
+	FindAll(float64, float64, float64) ([]Event, error)
 	FindOne(id uint64) (*Event, error)
-	FindByCoords(float64, float64, float64) (*[]Event, error)
 	CreateOne(*Event) error
 	UpdateOne(*Event) error
 	DeleteOne(uint64) error
@@ -21,16 +20,12 @@ func NewService(r *Repository) Service {
 	}
 }
 
-func (s *service) FindAll() (*[]Event, error) {
-	return (*s.repo).FindAll()
+func (s *service) FindAll(latitude, longitude, radius float64) ([]Event, error) {
+	return (*s.repo).FindAll(latitude, longitude, math.Abs(radius))
 }
 
 func (s *service) FindOne(id uint64) (*Event, error) {
 	return (*s.repo).FindOne(id)
-}
-
-func (s *service) FindByCoords(latitude, longitude, radius float64) (*[]Event, error) {
-	return (*s.repo).FindByCoords(latitude, longitude, math.Abs(radius))
 }
 
 func (s *service) CreateOne(event *Event) error {

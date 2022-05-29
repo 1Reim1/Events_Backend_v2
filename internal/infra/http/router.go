@@ -29,10 +29,10 @@ func AddEventRoutes(router *chi.Router, eventController *controllers.EventContro
 			"/{id}",
 			eventController.FindOne(),
 		)
-		apiRouter.Get(
-			"/byCoords",
-			eventController.FindByCoords(),
-		)
+		//apiRouter.Get(
+		//	"/byCoords",
+		//	eventController.FindByCoords(),
+		//)
 		apiRouter.Post(
 			"/",
 			eventController.CreateOne(),

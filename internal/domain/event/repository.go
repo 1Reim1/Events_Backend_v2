@@ -7,9 +7,8 @@ import (
 )
 
 type Repository interface {
-	FindAll() (*[]Event, error)
+	FindAll(float64, float64, float64) ([]Event, error)
 	FindOne(uint64) (*Event, error)
-	FindByCoords(float64, float64, float64) (*[]Event, error)
 	CreateOne(*Event) error
 	UpdateOne(*Event) error
 	DeleteOne(uint64) error
@@ -34,13 +33,20 @@ func NewRepository(conf *config.Config) (Repository, error) {
 	return &repository{sess}, nil
 }
 
-func (repo *repository) FindAll() (*[]Event, error) {
+func (repo *repository) FindAll(latitude, longitude, radius float64) ([]Event, error) {
 	var events []Event
-	err := repo.sess.Collection("events").Find().All(&events)
+	var res db.Result
+	collection := repo.sess.Collection("events")
+	if radius != 0 {
+		res = collection.Find("SQRT(POW(? - latitude, 2) + POW(? - longitude, 2)) <= ?", latitude, longitude, radius)
+	} else {
+		res = collection.Find()
+	}
+	err := res.All(&events)
 	if err != nil {
 		return nil, err
 	}
-	return &events, nil
+	return events, nil
 }
 
 func (repo *repository) FindOne(id uint64) (*Event, error) {
@@ -50,17 +56,6 @@ func (repo *repository) FindOne(id uint64) (*Event, error) {
 		return nil, err
 	}
 	return &event, nil
-}
-
-func (repo *repository) FindByCoords(latitude, longitude, radius float64) (*[]Event, error) {
-	events := make([]Event, 0)
-	err := repo.sess.Collection("events").
-		Find("SQRT(POW(? - latitude, 2) + POW(? - longitude, 2)) < ?", latitude, longitude, radius).
-		All(&events)
-	if err != nil {
-		return nil, err
-	}
-	return &events, nil
 }
 
 func (repo *repository) CreateOne(event *Event) error {

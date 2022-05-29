@@ -21,7 +21,39 @@ func NewEventController(s *event.Service) *EventController {
 
 func (c *EventController) FindAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		events, err := (*c.service).FindAll()
+		var latitude, longitude, radius float64
+		var err error
+		if r.URL.Query().Has("latitude") && r.URL.Query().Has("longitude") && r.URL.Query().Has("radius") {
+			latitude, err = strconv.ParseFloat(r.URL.Query().Get("latitude"), 64)
+			if err != nil {
+				fmt.Printf("EventController.FindAll(): %s\n", err)
+				err = internalServerError(w, err)
+				if err != nil {
+					fmt.Printf("EventController.FindAll(): %s\n", err)
+				}
+				return
+			}
+			longitude, err = strconv.ParseFloat(r.URL.Query().Get("longitude"), 64)
+			if err != nil {
+				fmt.Printf("EventController.FindAll(): %s\n", err)
+				err = internalServerError(w, err)
+				if err != nil {
+					fmt.Printf("EventController.FindAll(): %s\n", err)
+				}
+				return
+			}
+			radius, err = strconv.ParseFloat(r.URL.Query().Get("radius"), 64)
+			if err != nil {
+				fmt.Printf("EventController.FindAll(): %s\n", err)
+				err = internalServerError(w, err)
+				if err != nil {
+					fmt.Printf("EventController.FindAll(): %s\n", err)
+				}
+				return
+			}
+		}
+
+		events, err := (*c.service).FindAll(latitude, longitude, radius)
 		if err != nil {
 			fmt.Printf("EventController.FindAll(): %s\n", err)
 			err = internalServerError(w, err)
@@ -62,52 +94,6 @@ func (c *EventController) FindOne() http.HandlerFunc {
 		err = success(w, event)
 		if err != nil {
 			fmt.Printf("EventController.FindOne(): %s\n", err)
-		}
-	}
-}
-
-func (c *EventController) FindByCoords() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		latitude, err := strconv.ParseFloat(r.URL.Query().Get("latitude"), 64)
-		if err != nil {
-			fmt.Printf("EventController.FindByCoords(): %s\n", err)
-			err = internalServerError(w, err)
-			if err != nil {
-				fmt.Printf("EventController.FindByCoords(): %s\n", err)
-			}
-			return
-		}
-		longitude, err := strconv.ParseFloat(r.URL.Query().Get("longitude"), 64)
-		if err != nil {
-			fmt.Printf("EventController.FindByCoords(): %s\n", err)
-			err = internalServerError(w, err)
-			if err != nil {
-				fmt.Printf("EventController.FindByCoords(): %s\n", err)
-			}
-			return
-		}
-		radius, err := strconv.ParseFloat(r.URL.Query().Get("radius"), 64)
-		if err != nil {
-			fmt.Printf("EventController.FindByCoords(): %s\n", err)
-			err = internalServerError(w, err)
-			if err != nil {
-				fmt.Printf("EventController.FindByCoords(): %s\n", err)
-			}
-			return
-		}
-		events, err := (*c.service).FindByCoords(latitude, longitude, radius)
-		if err != nil {
-			fmt.Printf("EventController.FindByCoords(): %s\n", err)
-			err = internalServerError(w, err)
-			if err != nil {
-				fmt.Printf("EventController.FindByCoords(): %s\n", err)
-			}
-			return
-		}
-
-		err = success(w, events)
-		if err != nil {
-			fmt.Printf("EventController.FindAll(): %s\n", err)
 		}
 	}
 }
