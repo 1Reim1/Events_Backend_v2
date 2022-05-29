@@ -60,8 +60,7 @@ func (repo *repository) FindOne(id uint64) (*Event, error) {
 
 func (repo *repository) CreateOne(event *Event) error {
 	event.ID = 0
-	err := repo.sess.Collection("events").InsertReturning(event)
-	return err
+	return repo.sess.Collection("events").InsertReturning(event)
 }
 
 func (repo *repository) UpdateOne(event *Event) error {
